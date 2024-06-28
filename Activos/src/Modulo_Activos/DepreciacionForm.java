@@ -64,8 +64,6 @@ public class DepreciacionForm extends JFrame {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Aquí puedes añadir la lógica para agregar un detalle
-                // Se podría abrir un nuevo formulario para ingresar los detalles
             }
         });
 
@@ -73,13 +71,11 @@ public class DepreciacionForm extends JFrame {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Aquí puedes añadir la lógica para guardar la depreciación
                 int numero = Integer.parseInt(numeroField.getText());
                 Date fecha = new Date(fechaField.getText());
                 String observaciones = observacionesField.getText();
                 String responsable = responsableField.getText();
                 CabeceraDepreciacion cabecera = new CabeceraDepreciacion(numero, fecha, observaciones, responsable, detalles);
-                // Guarda la cabecera y los detalles en tu base de datos o lista
                 JOptionPane.showMessageDialog(null, "Depreciación guardada");
             }
         });

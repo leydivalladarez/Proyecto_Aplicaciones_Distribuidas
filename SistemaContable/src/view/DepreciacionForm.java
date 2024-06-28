@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package modulo_activos;
+package view;
 
 /**
  *
@@ -16,6 +16,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import model.CabeceraDepreciacion;
+import model.DetalleDepreciacion;
 
 public class DepreciacionForm extends JFrame {
     private JTextField numeroField;
@@ -64,8 +66,6 @@ public class DepreciacionForm extends JFrame {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Aquí puedes añadir la lógica para agregar un detalle
-                // Se podría abrir un nuevo formulario para ingresar los detalles
             }
         });
 
@@ -73,13 +73,11 @@ public class DepreciacionForm extends JFrame {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Aquí puedes añadir la lógica para guardar la depreciación
                 int numero = Integer.parseInt(numeroField.getText());
                 Date fecha = new Date(fechaField.getText());
                 String observaciones = observacionesField.getText();
                 String responsable = responsableField.getText();
                 CabeceraDepreciacion cabecera = new CabeceraDepreciacion(numero, fecha, observaciones, responsable, detalles);
-                // Guarda la cabecera y los detalles en tu base de datos o lista
                 JOptionPane.showMessageDialog(null, "Depreciación guardada");
             }
         });

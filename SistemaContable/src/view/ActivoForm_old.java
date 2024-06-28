@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package modulo_activos;
+package view;
 
 /**
  *
@@ -13,8 +13,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import model.Activo;
+import model.TipoActivo;
 
-public class ActivoForm extends JFrame {
+public class ActivoForm_old extends JFrame {
     private JTextField idField;
     private JTextField nombreField;
     private JTextField totalPeriodosField;
@@ -23,7 +25,7 @@ public class ActivoForm extends JFrame {
     private JButton saveButton;
     private JButton cancelButton;
 
-    public ActivoForm() {
+    public ActivoForm_old() {
         setTitle("Activo");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,7 +69,6 @@ public class ActivoForm extends JFrame {
                 double valorCompra = Double.parseDouble(valorCompraField.getText());
                 TipoActivo tipoActivo = (TipoActivo) tipoActivoComboBox.getSelectedItem();
                 Activo activo = new Activo(id, nombre, totalPeriodos, valorCompra, tipoActivo);
-                // Guarda el activo en la base de datos
                 JOptionPane.showMessageDialog(null, "Activo guardado");
             }
         });
@@ -84,7 +85,7 @@ public class ActivoForm extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new ActivoForm().setVisible(true);
+                new ActivoForm_old().setVisible(true);
             }
         });
     }

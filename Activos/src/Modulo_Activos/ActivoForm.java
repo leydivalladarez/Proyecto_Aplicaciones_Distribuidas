@@ -67,7 +67,6 @@ public class ActivoForm extends JFrame {
                 double valorCompra = Double.parseDouble(valorCompraField.getText());
                 TipoActivo tipoActivo = (TipoActivo) tipoActivoComboBox.getSelectedItem();
                 Activo activo = new Activo(id, nombre, totalPeriodos, valorCompra, tipoActivo);
-                // Guarda el activo en la base de datos
                 JOptionPane.showMessageDialog(null, "Activo guardado");
             }
         });

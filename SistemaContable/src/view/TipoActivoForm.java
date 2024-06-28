@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package modulo_activos;
+package view;
 
 /**
  *
@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import model.TipoActivo;
 
 public class TipoActivoForm extends JFrame {
     private JTextField codigoField;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package modulo_activos;
+package view;
 
 /**
  *
@@ -14,6 +14,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
+import model.Activo;
+import model.DetalleDepreciacion;
+import model.TipoActivo;
 
 public class ReporteDepreciacionAcumuladaForm extends JFrame {
     private JTable reporteTable;
