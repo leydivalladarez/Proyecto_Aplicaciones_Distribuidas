@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view;
+package view.usuario;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import model.Usuario;
 import services.UsuarioService;
 import util.Conexion;
+import view.MenuPrincipal;
+import view.activo.ActivoForm;
 
 /**
  *
@@ -22,6 +24,8 @@ import util.Conexion;
  */
 public class Login extends javax.swing.JFrame {
     UsuarioService usuarioService;
+    MenuPrincipal menu = new MenuPrincipal();
+    Usuario usuario;
 
     /**
      * Creates new form Login
@@ -49,13 +53,36 @@ public class Login extends javax.swing.JFrame {
         exitButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Iniciar Sesión");
+        setResizable(false);
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Inicio de Sesión");
 
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel2.setText("Usuario");
 
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel3.setText("Contraseña");
 
+        txtUsuario.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtUsuarioKeyPressed(evt);
+            }
+        });
+
+        txtContrasenia.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtContrasenia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtContraseniaKeyPressed(evt);
+            }
+        });
+
+        loginButton.setBackground(new java.awt.Color(100, 149, 237));
+        loginButton.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        loginButton.setForeground(new java.awt.Color(255, 255, 255));
         loginButton.setText("Iniciar Sesión");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -63,40 +90,47 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        exitButton.setBackground(new java.awt.Color(255, 51, 51));
+        exitButton.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        exitButton.setForeground(new java.awt.Color(255, 255, 255));
         exitButton.setText("Salir");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(35, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(41, 41, 41)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
-                                .addGap(41, 41, 41)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtUsuario)
-                                    .addComponent(txtContrasenia, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(loginButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(exitButton, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))))
+                            .addComponent(txtUsuario)
+                            .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(95, 95, 95)
-                        .addComponent(jLabel1)))
-                .addContainerGap(30, Short.MAX_VALUE))
+                        .addComponent(loginButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(exitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(35, 35, 35))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(94, 94, 94)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addGap(17, 17, 17)
                 .addComponent(jLabel1)
-                .addGap(42, 42, 42)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -104,47 +138,97 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loginButton)
                     .addComponent(exitButton))
-                .addGap(23, 23, 23))
+                .addGap(20, 20, 20))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        String usuario = txtUsuario.getText();
-        String contrasenia = String.valueOf(txtContrasenia.getPassword());
-        Usuario usuarioM = new Usuario(usuario,contrasenia);
-        boolean loggedIn;
-        try {
-            loggedIn = usuarioService.loguearUsuario(usuario, contrasenia);
-            if(loggedIn){
-                JOptionPane.showMessageDialog(null, "Bienvenido/a "+usuario);
-            }else{
-                JOptionPane.showMessageDialog(null, "Error en el usuario y/o contraseña");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        //JOptionPane.showMessageDialog(null, "Usuario: "+contrasenia);
+        this.loginAction();
     }//GEN-LAST:event_loginButtonActionPerformed
+
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_exitButtonActionPerformed
+
+    private void txtContraseniaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContraseniaKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            this.loginAction();
+        }
+    }//GEN-LAST:event_txtContraseniaKeyPressed
+
+    private void txtUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            txtContrasenia.requestFocus();
+        }
+    }//GEN-LAST:event_txtUsuarioKeyPressed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/parcial_1", "root", "");
-            JFrame frame = new JFrame("Iniciar Sesión");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setBounds(100, 100, 450, 300);
-            frame.setContentPane(new Login(connection));
-            frame.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ActivoForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ActivoForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ActivoForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ActivoForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    Connection connection = Conexion.getConnection();
+                    new Login(connection).setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
+    
+    private void loginAction(){
+        String tUsuario = txtUsuario.getText();
+        String contrasenia = String.valueOf(txtContrasenia.getPassword());
+        Usuario loggedIn;
+        try {
+            loggedIn = usuarioService.loguearUsuario(tUsuario, contrasenia);
+            if(loggedIn != null){
+                JOptionPane.showMessageDialog(null, "Bienvenido/a "+loggedIn.getUsuario());                
+                menu.setLogin(this);
+                menu.setVisible(true);
+                menu.setUsuario(loggedIn);
+                this.setVisible(false);
+            }else{
+                JOptionPane.showMessageDialog(null, "Error en el usuario y/o contraseña");
+            }
+            txtUsuario.setText("");
+            txtContrasenia.setText("");
+            txtUsuario.requestFocus();
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

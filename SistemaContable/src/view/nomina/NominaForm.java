@@ -1,4 +1,4 @@
-package view;
+package view.nomina;
 
 import dao.EmpleadoDAO;
 import model.Empleado;

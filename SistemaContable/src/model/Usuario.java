@@ -13,6 +13,7 @@ public class Usuario {
     private int id;
     private String usuario;
     private String contrasenia;
+    private Rol rol;
 
     public Usuario() {
     }
@@ -22,6 +23,13 @@ public class Usuario {
         this.contrasenia = contrasenia;
     }
 
+    public Usuario(int id, String usuario, String contrasenia, Rol rol) {
+        this.id = id;
+        this.usuario = usuario;
+        this.contrasenia = contrasenia;
+        this.rol = rol;
+    }  
+    
     public int getId() {
         return id;
     }
@@ -45,6 +53,12 @@ public class Usuario {
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
     }
-    
-    
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
 }

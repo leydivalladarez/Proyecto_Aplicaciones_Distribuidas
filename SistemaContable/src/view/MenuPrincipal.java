@@ -5,12 +5,18 @@
  */
 package view;
 
+import model.Usuario;
+import view.usuario.Login;
+import view.usuario.UsuarioShow;
+
 /**
  *
  * @author gamert
  */
 public class MenuPrincipal extends javax.swing.JFrame {
-
+    private Login login;
+    private Usuario usuario;
+    UsuarioShow usuarioShow = new UsuarioShow();
     /**
      * Creates new form MenuPrincipal
      */
@@ -27,29 +33,65 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        escritorio = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        jMenu5 = new javax.swing.JMenu();
+        menuNomina = new javax.swing.JMenu();
+        menuActivos = new javax.swing.JMenu();
+        menuContabilidad = new javax.swing.JMenu();
+        menuFacturacion = new javax.swing.JMenu();
+        menuPerfil = new javax.swing.JMenu();
+        menuUsuario = new javax.swing.JMenuItem();
+        menuLogout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jMenu2.setText("Nómina");
-        jMenuBar1.add(jMenu2);
+        javax.swing.GroupLayout escritorioLayout = new javax.swing.GroupLayout(escritorio);
+        escritorio.setLayout(escritorioLayout);
+        escritorioLayout.setHorizontalGroup(
+            escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1038, Short.MAX_VALUE)
+        );
+        escritorioLayout.setVerticalGroup(
+            escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 595, Short.MAX_VALUE)
+        );
 
-        jMenu3.setText("Activos");
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
 
-        jMenu1.setText("Contabilidad");
-        jMenuBar1.add(jMenu1);
+        menuNomina.setText("Nómina");
+        jMenuBar1.add(menuNomina);
 
-        jMenu4.setText("Facturación");
-        jMenuBar1.add(jMenu4);
+        menuActivos.setText("Activos");
+        jMenuBar1.add(menuActivos);
 
-        jMenu5.setText("Cerrar Sesión");
-        jMenuBar1.add(jMenu5);
+        menuContabilidad.setText("Contabilidad");
+        jMenuBar1.add(menuContabilidad);
+
+        menuFacturacion.setText("Facturación");
+        jMenuBar1.add(menuFacturacion);
+
+        menuPerfil.setText("Perfil");
+
+        menuUsuario.setText("Usuario");
+        menuUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                menuUsuarioMousePressed(evt);
+            }
+        });
+        menuPerfil.add(menuUsuario);
+
+        menuLogout.setText("Cerrar Sesión");
+        menuLogout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuLogoutMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                menuLogoutMousePressed(evt);
+            }
+        });
+        menuPerfil.add(menuLogout);
+
+        jMenuBar1.add(menuPerfil);
 
         setJMenuBar(jMenuBar1);
 
@@ -57,16 +99,49 @@ public class MenuPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 675, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(escritorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 498, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(escritorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void menuLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuLogoutMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuLogoutMouseClicked
+
+    private void menuLogoutMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuLogoutMousePressed
+        login.setVisible(true);
+        this.setUsuario(null);
+        this.setVisible(false);
+    }//GEN-LAST:event_menuLogoutMousePressed
+
+    private void menuUsuarioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUsuarioMousePressed
+        usuarioShow.setUsuario(usuario);
+        usuarioShow.setVisible(true);
+    }//GEN-LAST:event_menuUsuarioMousePressed
+
+    public void setLogin(Login login){
+        this.login = login;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+        menuUsuario.setText(usuario.getUsuario());
+    }    
+    
     /**
      * @param args the command line arguments
      */
@@ -103,11 +178,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
+    private javax.swing.JDesktopPane escritorio;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu menuActivos;
+    private javax.swing.JMenu menuContabilidad;
+    private javax.swing.JMenu menuFacturacion;
+    private javax.swing.JMenuItem menuLogout;
+    private javax.swing.JMenu menuNomina;
+    private javax.swing.JMenu menuPerfil;
+    private javax.swing.JMenuItem menuUsuario;
     // End of variables declaration//GEN-END:variables
 }
