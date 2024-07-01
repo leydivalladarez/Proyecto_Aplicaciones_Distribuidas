@@ -5,7 +5,13 @@
  */
 package view;
 
+import java.awt.Component;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import model.Usuario;
 import view.factura.ListaFacturasFrame;
 import view.factura.ciudades.ListaCiudadesFrame;
@@ -28,7 +34,34 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public MenuPrincipal(Connection connection) {
         this.connection = connection;
         initComponents();
+        //setEscritorioPaneBackground();
     }
+    
+//    private void setEscritorioPaneBackground() {
+//        try {
+//            Image backgroundImage = ImageIO.read(new File("assets/work.jpeg"));
+//            EscritorioPane desktopPane = new EscritorioPane(backgroundImage);
+//
+//            if (!desktopPane.isBackgroundImageLoaded()) {
+//                System.out.println("Background image not found or could not be loaded.");
+//            }
+//
+//            // Transfer child components from 'escritorio' to 'desktopPane'
+//            while (escritorio.getComponentCount() > 0) {
+//                Component comp = escritorio.getComponent(0);
+//                escritorio.remove(comp);
+//                desktopPane.add(comp);
+//            }
+//
+//            // Replace the existing JDesktopPane with the custom EscritorioPane
+//            setContentPane(desktopPane);
+//            revalidate();
+//            repaint();
+//            
+//        } catch (IOException e) {
+//            System.err.println("Error loading background image: " + e.getMessage());
+//        }
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
