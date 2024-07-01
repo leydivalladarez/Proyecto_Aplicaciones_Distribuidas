@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-06-2024 a las 00:10:16
+-- Tiempo de generación: 01-07-2024 a las 23:26:22
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -58,6 +58,14 @@ CREATE TABLE `ciudad` (
   `nombre` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Volcado de datos para la tabla `ciudad`
+--
+
+INSERT INTO `ciudad` (`codigo`, `nombre`) VALUES
+(1, 'Quito'),
+(2, 'Guayaquil');
+
 -- --------------------------------------------------------
 
 --
@@ -70,6 +78,16 @@ CREATE TABLE `cliente` (
   `nombre` varchar(100) NOT NULL,
   `direccion` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `cliente`
+--
+
+INSERT INTO `cliente` (`id`, `ruc`, `nombre`, `direccion`) VALUES
+(1, '1723456784001', 'Peter Parker', 'Av. Amazonas'),
+(4, '1548576543002', 'Demi Lovato', 'Av. Colon y America'),
+(5, '1745676543001', 'Juan Perez', 'Cotocollao'),
+(6, '0583948576001', 'VIviana Perez', 'Rumuñahui');
 
 -- --------------------------------------------------------
 
@@ -176,6 +194,13 @@ CREATE TABLE `empleado` (
   `sueldo` decimal(8,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Volcado de datos para la tabla `empleado`
+--
+
+INSERT INTO `empleado` (`cedula`, `nombre`, `fecha_ingreso`, `sueldo`) VALUES
+('1746555678', 'Juan', '2024-06-10 23:40:27', 512.00);
+
 -- --------------------------------------------------------
 
 --
@@ -189,6 +214,51 @@ CREATE TABLE `factura` (
   `ciudad_codigo` int(11) NOT NULL,
   `cliente_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `modulos`
+--
+
+CREATE TABLE `modulos` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `modulos`
+--
+
+INSERT INTO `modulos` (`id`, `nombre`) VALUES
+(1, 'nomina'),
+(2, 'activos'),
+(3, 'contabilidad'),
+(4, 'facturacion');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `modulo_rol`
+--
+
+CREATE TABLE `modulo_rol` (
+  `modulo_id` int(11) NOT NULL,
+  `rol_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `modulo_rol`
+--
+
+INSERT INTO `modulo_rol` (`modulo_id`, `rol_id`) VALUES
+(1, 2),
+(2, 2),
+(3, 2),
+(4, 2),
+(1, 3),
+(2, 3),
+(3, 4);
 
 -- --------------------------------------------------------
 
@@ -216,6 +286,27 @@ CREATE TABLE `nomina` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `roles`
+--
+
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `roles`
+--
+
+INSERT INTO `roles` (`id`, `nombre`) VALUES
+(1, 'admin'),
+(2, 'grupo a'),
+(3, 'grupo b'),
+(4, 'grupo c');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tipo_activo`
 --
 
@@ -234,6 +325,29 @@ CREATE TABLE `tipo_cuenta` (
   `codigo` int(11) NOT NULL,
   `nombre` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `id` int(11) NOT NULL,
+  `usuario` varchar(50) NOT NULL,
+  `contrasenia` varchar(50) NOT NULL,
+  `rol_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`id`, `usuario`, `contrasenia`, `rol_id`) VALUES
+(1, 'leydi', '123456', 1),
+(2, 'tony', '123456', 2),
+(3, 'peter', '123456', 2),
+(4, 'camila', '123456', 3);
 
 --
 -- Índices para tablas volcadas
@@ -330,6 +444,19 @@ ALTER TABLE `factura`
   ADD KEY `fk_cabecera_factura_cliente1_idx` (`cliente_id`);
 
 --
+-- Indices de la tabla `modulos`
+--
+ALTER TABLE `modulos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `modulo_rol`
+--
+ALTER TABLE `modulo_rol`
+  ADD KEY `fk_modulo` (`modulo_id`),
+  ADD KEY `fk_rol` (`rol_id`);
+
+--
 -- Indices de la tabla `motivo`
 --
 ALTER TABLE `motivo`
@@ -343,6 +470,12 @@ ALTER TABLE `nomina`
   ADD KEY `fk_nomina_empleado1_idx` (`empleado_cedula`);
 
 --
+-- Indices de la tabla `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `tipo_activo`
 --
 ALTER TABLE `tipo_activo`
@@ -353,6 +486,13 @@ ALTER TABLE `tipo_activo`
 --
 ALTER TABLE `tipo_cuenta`
   ADD PRIMARY KEY (`codigo`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_usuarios_rol` (`rol_id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -374,7 +514,13 @@ ALTER TABLE `articulo`
 -- AUTO_INCREMENT de la tabla `ciudad`
 --
 ALTER TABLE `ciudad`
-  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `cliente`
+--
+ALTER TABLE `cliente`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `comprobante_contable`
@@ -425,6 +571,12 @@ ALTER TABLE `factura`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `modulos`
+--
+ALTER TABLE `modulos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT de la tabla `motivo`
 --
 ALTER TABLE `motivo`
@@ -437,6 +589,12 @@ ALTER TABLE `nomina`
   MODIFY `numero` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT de la tabla `tipo_activo`
 --
 ALTER TABLE `tipo_activo`
@@ -447,6 +605,12 @@ ALTER TABLE `tipo_activo`
 --
 ALTER TABLE `tipo_cuenta`
   MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
@@ -500,10 +664,23 @@ ALTER TABLE `factura`
   ADD CONSTRAINT `fk_cabecera_factura_cliente1` FOREIGN KEY (`cliente_id`) REFERENCES `cliente` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `modulo_rol`
+--
+ALTER TABLE `modulo_rol`
+  ADD CONSTRAINT `fk_modulo` FOREIGN KEY (`modulo_id`) REFERENCES `modulos` (`id`),
+  ADD CONSTRAINT `fk_rol` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`);
+
+--
 -- Filtros para la tabla `nomina`
 --
 ALTER TABLE `nomina`
   ADD CONSTRAINT `fk_nomina_empleado1` FOREIGN KEY (`empleado_cedula`) REFERENCES `empleado` (`cedula`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD CONSTRAINT `fk_usuarios_rol` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
