@@ -28,40 +28,42 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private Usuario usuario;
     UsuarioShow usuarioShow = new UsuarioShow();
     private Connection connection;
+    private EscritorioPane desktopPane;
     /**
      * Creates new form MenuPrincipal
      */
     public MenuPrincipal(Connection connection) {
         this.connection = connection;
         initComponents();
-        //setEscritorioPaneBackground();
+        setEscritorioPaneBackground();
     }
     
-//    private void setEscritorioPaneBackground() {
-//        try {
-//            Image backgroundImage = ImageIO.read(new File("assets/work.jpeg"));
-//            EscritorioPane desktopPane = new EscritorioPane(backgroundImage);
-//
-//            if (!desktopPane.isBackgroundImageLoaded()) {
-//                System.out.println("Background image not found or could not be loaded.");
-//            }
-//
-//            // Transfer child components from 'escritorio' to 'desktopPane'
+    private void setEscritorioPaneBackground() {
+        try {
+            Image backgroundImage = ImageIO.read(new File("assets/work.jpeg"));
+            desktopPane = new EscritorioPane(backgroundImage);
+
+            if (!desktopPane.isBackgroundImageLoaded()) {
+                System.out.println("Background image not found or could not be loaded.");
+            }
+
+            // Transfer child components from 'escritorio' to 'desktopPane'
 //            while (escritorio.getComponentCount() > 0) {
 //                Component comp = escritorio.getComponent(0);
 //                escritorio.remove(comp);
 //                desktopPane.add(comp);
 //            }
-//
-//            // Replace the existing JDesktopPane with the custom EscritorioPane
-//            setContentPane(desktopPane);
-//            revalidate();
-//            repaint();
-//            
-//        } catch (IOException e) {
-//            System.err.println("Error loading background image: " + e.getMessage());
-//        }
-//    }
+            //escritorio.add(desktopPane);
+            //desktopPane.add(escritorio);
+            // Replace the existing JDesktopPane with the custom EscritorioPane
+            setContentPane(desktopPane);
+            revalidate();
+            repaint();
+            
+        } catch (IOException e) {
+            System.err.println("Error loading background image: " + e.getMessage());
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -200,19 +202,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void opListaClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opListaClientesActionPerformed
         ListaClientesFrame listaClientes = new ListaClientesFrame(this.connection);        
-        escritorio.add(listaClientes);
+        desktopPane.add(listaClientes);
         listaClientes.show();
     }//GEN-LAST:event_opListaClientesActionPerformed
 
     private void opListaCiudadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opListaCiudadesActionPerformed
         ListaCiudadesFrame listaCiudades = new ListaCiudadesFrame(connection);
-        escritorio.add(listaCiudades);
+        desktopPane.add(listaCiudades);
         listaCiudades.show();
     }//GEN-LAST:event_opListaCiudadesActionPerformed
 
     private void opListaFacturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opListaFacturasActionPerformed
-        ListaFacturasFrame listaFacturas = new ListaFacturasFrame(escritorio, connection);
-        escritorio.add(listaFacturas);
+        ListaFacturasFrame listaFacturas = new ListaFacturasFrame(desktopPane, connection);
+        desktopPane.add(listaFacturas);
         listaFacturas.show();
     }//GEN-LAST:event_opListaFacturasActionPerformed
 
