@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view.factura;
+package view.factura.ciudades;
 
-import dao.ClienteDAO;
+import view.factura.ciudades.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -14,30 +14,29 @@ import java.util.logging.Logger;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.TableColumn;
-import model.Cliente;
-import services.ClienteService;
+import model.Ciudad;
+import services.CiudadService;
 import view.usuario.Login;
 
 /**
  *
  * @author gamert
  */
-public class ListaClientes extends javax.swing.JInternalFrame {
-    private ClienteTableModel clienteTableModel;
+public class ListaCiudadesFrame extends javax.swing.JInternalFrame {
+    private CiudadTableModel ciudadTableModel;
     private Connection connection;
-    private ClienteService clienteService;
-    private AgregarCliente agregarCliente;
+    private CiudadService ciudadService;
+    private AgregarCiudadFrame agregarCiudad;
     /**
-     * Creates new form ListaClientes
+     * Creates new form ListaCiudades
      */
-    public ListaClientes(Connection connection) {
+    public ListaCiudadesFrame(Connection connection) {
         initComponents();
         this.connection = connection;
-        clienteService = new ClienteService(connection);
-        cargarClientes(); 
-        agregarCliente = new AgregarCliente();
-        agregarCliente.setListaClientes(this);
-        agregarCliente.setClienteService(clienteService);
+        ciudadService = new CiudadService(connection);
+        cargarCiudades(); 
+        agregarCiudad = new AgregarCiudadFrame(ciudadService);
+        agregarCiudad.setListaCiudades(this);
         
         // Agregar un listener para maximizar el JInternalFrame cuando se abre
         this.addInternalFrameListener(new InternalFrameAdapter() {
@@ -46,7 +45,7 @@ public class ListaClientes extends javax.swing.JInternalFrame {
                 try {
                     setMaximum(true); // Maximiza el JInternalFrame
                 } catch (java.beans.PropertyVetoException ex) {
-                    Logger.getLogger(ListaClientes.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ListaCiudadesFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -62,32 +61,32 @@ public class ListaClientes extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblClientes = new javax.swing.JTable();
+        tblCiudades = new javax.swing.JTable();
         btnAgregar = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Clientes");
+        setTitle("Ciudades");
 
-        tblClientes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        tblClientes.setModel(new javax.swing.table.DefaultTableModel(
+        tblCiudades.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tblCiudades.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "ID", "RUC", "Nombre", "Dirección", "Acción"
+                "ID", "Nombre", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true
+                false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -98,8 +97,8 @@ public class ListaClientes extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblClientes.setRowHeight(40);
-        jScrollPane1.setViewportView(tblClientes);
+        tblCiudades.setRowHeight(40);
+        jScrollPane1.setViewportView(tblCiudades);
 
         btnAgregar.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btnAgregar.setText("Agregar");
@@ -135,29 +134,29 @@ public class ListaClientes extends javax.swing.JInternalFrame {
         setBounds(0, 0, 821, 552);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cargarClientes() {
+    private void cargarCiudades() {
         try {
         // Verificar que el servicio no sea null
-            if (clienteService == null) {
-                throw new IllegalStateException("ClienteService no ha sido inicializado.");
+            if (ciudadService == null) {
+                throw new IllegalStateException("CiudadService no ha sido inicializado.");
             }
 
-            // Obtener la lista de clientes desde la base de datos
-            List<Cliente> clientes = clienteService.obtenerTodosLosClientes();
+            // Obtener la lista de ciudades desde la base de datos
+            List<Ciudad> ciudades = ciudadService.obtenerTodasLasCiudades();
 
-            // Verificar que la lista de clientes no sea null
-            if (clientes == null) {
-                throw new IllegalStateException("La lista de clientes es null.");
+            // Verificar que la lista de ciudades no sea null
+            if (ciudades == null) {
+                throw new IllegalStateException("La lista de ciudades es null.");
             }
 
             // Crear el modelo de tabla y configurarlo en la tabla
-            clienteTableModel = new ClienteTableModel(clientes);
-            tblClientes.setModel(clienteTableModel);
+            ciudadTableModel = new CiudadTableModel(ciudades);
+            tblCiudades.setModel(ciudadTableModel);
             
             // Ajustar el ancho de las columnas
             TableColumn column;
-            for (int i = 0; i < tblClientes.getColumnCount(); i++) {
-                column = tblClientes.getColumnModel().getColumn(i);
+            for (int i = 0; i < tblCiudades.getColumnCount(); i++) {
+                column = tblCiudades.getColumnModel().getColumn(i);
                 if (i == 0) { // Columna "ID"
                     column.setPreferredWidth(50);
                 } else if (i == 1) { // Columna "RUC"
@@ -172,32 +171,46 @@ public class ListaClientes extends javax.swing.JInternalFrame {
             }
 
             // Configurar la columna de "Acciones" con los botones
-            TableColumn actionColumn = tblClientes.getColumnModel().getColumn(4);
-            actionColumn.setCellRenderer(new ClientButtonColumn(tblClientes, clienteService));
-            actionColumn.setCellEditor(new ClientButtonColumn(tblClientes, clienteService));
+            TableColumn actionColumn = tblCiudades.getColumnModel().getColumn(2);
+            actionColumn.setCellRenderer(new CiudadButtonColumn(tblCiudades, ciudadService, this));
+            actionColumn.setCellEditor(new CiudadButtonColumn(tblCiudades, ciudadService, this));
         } catch (SQLException e) {
-            Logger.getLogger(ListaClientes.class.getName()).log(Level.SEVERE, "Error SQL al cargar clientes", e);
+            Logger.getLogger(ListaCiudadesFrame.class.getName()).log(Level.SEVERE, "Error SQL al cargar ciudades", e);
         } catch (IllegalStateException e) {
-            Logger.getLogger(ListaClientes.class.getName()).log(Level.SEVERE, "Estado ilegal al cargar clientes", e);
+            Logger.getLogger(ListaCiudadesFrame.class.getName()).log(Level.SEVERE, "Estado ilegal al cargar ciudades", e);
         } catch (Exception e) {
-            Logger.getLogger(ListaClientes.class.getName()).log(Level.SEVERE, "Error desconocido al cargar clientes", e);
+            Logger.getLogger(ListaCiudadesFrame.class.getName()).log(Level.SEVERE, "Error desconocido al cargar ciudades", e);
         }
     }
     
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        agregarCliente.setVisible(true);
+        agregarCiudad.setVisible(true);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    public void addCliente(Cliente cliente){
-        // Agregar el cliente al modelo de la tabla
-        clienteTableModel.getClientes().add(cliente);        
+    public void addCiudad(Ciudad ciudad){
+        // Agregar el ciudad al modelo de la tabla
+        ciudadTableModel.getCiudades().add(ciudad);        
         // Notificar al modelo de la tabla que los datos han cambiado
-        clienteTableModel.fireTableDataChanged();
+        ciudadTableModel.fireTableDataChanged();
+    }
+    
+    public void updateCiudad(Ciudad ciudad){
+        // Agregar el ciudad al modelo de la tabla
+        List<Ciudad> ciudades = ciudadTableModel.getCiudades();
+        for (int i = 0; i < ciudades.size(); i++) {
+            Ciudad get = ciudades.get(i);
+            if(get.getCodigo()== ciudad.getCodigo()){
+                ciudades.get(i).setNombre(ciudad.getNombre());
+            }
+        }
+        
+        // Notificar al modelo de la tabla que los datos han cambiado
+        ciudadTableModel.fireTableDataChanged();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblClientes;
+    private javax.swing.JTable tblCiudades;
     // End of variables declaration//GEN-END:variables
 }

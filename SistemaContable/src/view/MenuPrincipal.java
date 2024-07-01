@@ -7,7 +7,8 @@ package view;
 
 import java.sql.Connection;
 import model.Usuario;
-import view.factura.ListaClientes;
+import view.factura.ciudades.ListaCiudadesFrame;
+import view.factura.clientes.ListaClientesFrame;
 import view.usuario.Login;
 import view.usuario.UsuarioShow;
 
@@ -44,7 +45,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         menuContabilidad = new javax.swing.JMenu();
         menuFacturacion = new javax.swing.JMenu();
         opListaClientes = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        opListaCiudades = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         menuPerfil = new javax.swing.JMenu();
         menuUsuario = new javax.swing.JMenuItem();
@@ -84,8 +85,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         menuFacturacion.add(opListaClientes);
 
-        jMenuItem2.setText("Ciudades");
-        menuFacturacion.add(jMenuItem2);
+        opListaCiudades.setText("Ciudades");
+        opListaCiudades.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opListaCiudadesActionPerformed(evt);
+            }
+        });
+        menuFacturacion.add(opListaCiudades);
 
         jMenuItem3.setText("Facturas");
         menuFacturacion.add(jMenuItem3);
@@ -154,10 +160,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuUsuarioMousePressed
 
     private void opListaClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opListaClientesActionPerformed
-        ListaClientes listaClientes = new ListaClientes(this.connection);        
+        ListaClientesFrame listaClientes = new ListaClientesFrame(this.connection);        
         escritorio.add(listaClientes);
         listaClientes.show();
     }//GEN-LAST:event_opListaClientesActionPerformed
+
+    private void opListaCiudadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opListaCiudadesActionPerformed
+        ListaCiudadesFrame listaCiudades = new ListaCiudadesFrame(connection);
+        escritorio.add(listaCiudades);
+        listaCiudades.show();
+    }//GEN-LAST:event_opListaCiudadesActionPerformed
 
     public void setLogin(Login login){
         this.login = login;
@@ -213,7 +225,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane escritorio;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenu menuActivos;
     private javax.swing.JMenu menuContabilidad;
@@ -222,6 +233,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menuNomina;
     private javax.swing.JMenu menuPerfil;
     private javax.swing.JMenuItem menuUsuario;
+    private javax.swing.JMenuItem opListaCiudades;
     private javax.swing.JMenuItem opListaClientes;
     // End of variables declaration//GEN-END:variables
 }

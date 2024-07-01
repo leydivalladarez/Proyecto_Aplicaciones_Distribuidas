@@ -1,20 +1,21 @@
-package view.factura;
+package view.factura.ciudades;
 
+import view.factura.ciudades.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
-import model.Cliente;
+import model.Ciudad;
 
-public class ClienteTableModel extends AbstractTableModel {
-    private final List<Cliente> clientes;
-    private final String[] columnNames = {"ID", "RUC", "Nombre", "Dirección", "Acciones"};
+public class CiudadTableModel extends AbstractTableModel {
+    private final List<Ciudad> ciudades;
+    private final String[] columnNames = {"Código", "Nombre", "Acciones"};
 
-    public ClienteTableModel(List<Cliente> clientes) {
-        this.clientes = clientes;
+    public CiudadTableModel(List<Ciudad> ciudades) {
+        this.ciudades = ciudades;
     }
 
     @Override
     public int getRowCount() {
-        return clientes.size();
+        return ciudades.size();
     }
 
     @Override
@@ -29,23 +30,21 @@ public class ClienteTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Cliente cliente = clientes.get(rowIndex);
+        Ciudad ciudad = ciudades.get(rowIndex);
         switch (columnIndex) {
-            case 0: return cliente.getId();
-            case 1: return cliente.getRuc();
-            case 2: return cliente.getNombre();
-            case 3: return cliente.getDireccion();
-            case 4: return "Acciones";
+            case 0: return ciudad.getCodigo();
+            case 1: return ciudad.getNombre();
+            case 2: return "Acciones";
             default: return null;
         }
     }
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return columnIndex == 4; // Solo la columna de "Acciones" es editable
+        return columnIndex == 2; // Solo la columna de "Acciones" es editable
     }
 
-    public List<Cliente> getClientes() {
-        return clientes;
+    public List<Ciudad> getCiudades() {
+        return ciudades;
     }
 }

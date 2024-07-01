@@ -1,4 +1,4 @@
-package view.factura;
+package view.factura.clientes;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -9,12 +9,14 @@ import javax.swing.JOptionPane;
 import model.Cliente;
 import services.ClienteService;
 
-public class AgregarCliente extends javax.swing.JFrame {
-     private ClienteService clienteService;
+public class AgregarClienteFrame extends javax.swing.JFrame {
+    private ClienteService clienteService;
+    private Cliente cliente;
+    private int tipoFormulario; // 1 Crear, 2 Editar
     
-    ListaClientes listaClientes;
+    private ListaClientesFrame listaClientes;
 
-    public void setListaClientes(ListaClientes listaClientes) {
+    public void setListaClientes(ListaClientesFrame listaClientes) {
         this.listaClientes = listaClientes;
     }
 
@@ -24,9 +26,23 @@ public class AgregarCliente extends javax.swing.JFrame {
     /**
      * Creates new form AgregarCliente
      */
-    public AgregarCliente() {
+    public AgregarClienteFrame(ClienteService clienteService) {
+        tipoFormulario = 1;
+        this.clienteService = clienteService;
+        initComponents();
+        cerrar();        
+    }
+    public AgregarClienteFrame(Cliente cliente, ClienteService clienteService, ListaClientesFrame listaClientes) {
+        tipoFormulario = 2;
+        this.listaClientes = listaClientes;
+        this.clienteService = clienteService;
         initComponents();
         cerrar();
+        this.cliente = cliente;
+        txtRuc.setText(cliente.getRuc());
+        txtNombres.setText(cliente.getNombre());
+        txtDireccion.setText(cliente.getDireccion());
+        btnAgregar.setText("Actualizar");
     }
 
     /**
@@ -156,7 +172,7 @@ public class AgregarCliente extends javax.swing.JFrame {
     
     private void regresar() {
         limpiar();
-        this.listaClientes.setVisible(true);
+        //this.listaClientes.setVisible(true);
         this.setVisible(false);
     }
 
@@ -173,7 +189,7 @@ public class AgregarCliente extends javax.swing.JFrame {
     }
 
     public void confirmarSalida() {
-        int valor = JOptionPane.showConfirmDialog(this, "¿Está seguro/a de cerrar, se perderá la información?", "Advertecnia", JOptionPane.YES_NO_OPTION);
+        int valor = JOptionPane.showConfirmDialog(this, "¿Está seguro/a de cerrar, los datos no guardados se perderán?", "Advertecnia", JOptionPane.YES_NO_OPTION);
         if (valor == JOptionPane.YES_OPTION) {
             //JOptionPane.showMessageDialog(null, "Gracias por su visita");
             this.regresar();
@@ -185,12 +201,24 @@ public class AgregarCliente extends javax.swing.JFrame {
             String ruc = txtRuc.getText();
             String nombres = txtNombres.getText();
             String direccion = txtDireccion.getText();
-            Cliente cliente = new Cliente(0, ruc, nombres, direccion);
-            clienteService.agregarCliente(cliente);
-            JOptionPane.showMessageDialog(null, "Cliente creado correctamente");
+            if(tipoFormulario == 2){
+                cliente.setRuc(ruc);
+                cliente.setNombre(nombres);
+                cliente.setDireccion(direccion);
+                System.out.println("Paso 1: "+cliente.getId()+" "+cliente.getNombre());
+                clienteService.actualizarCliente(cliente);
+                System.out.println("Paso 2: "+cliente.getId()+" "+cliente.getNombre());                
+                JOptionPane.showMessageDialog(null, "Cliente actualizado correctamente ");
+                System.out.println(cliente.getId()+" "+cliente.getNombre());
+                listaClientes.updateCliente(cliente);
+            }else{
+                cliente = new Cliente(0, ruc, nombres, direccion);
+                clienteService.agregarCliente(cliente);
+                JOptionPane.showMessageDialog(null, "Cliente creado correctamente");
+                listaClientes.addCliente(cliente);
+            }            
             limpiar();
-            listaClientes.setVisible(true);
-            listaClientes.addCliente(cliente);
+            //listaClientes.setVisible(true);            
             this.setVisible(false);
         } catch (Exception e) {
             Logger.getLogger(this.getName()).log(Level.SEVERE, null, e);
@@ -218,20 +246,21 @@ public class AgregarCliente extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarClienteFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarClienteFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarClienteFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AgregarClienteFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AgregarCliente().setVisible(true);
+                //new AgregarClienteFrame().setVisible(true);
             }
         });
     }

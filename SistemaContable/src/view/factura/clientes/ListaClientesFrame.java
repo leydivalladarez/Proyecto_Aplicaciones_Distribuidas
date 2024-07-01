@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view.factura;
+package view.factura.clientes;
 
 import dao.ClienteDAO;
 import java.sql.Connection;
@@ -22,22 +22,21 @@ import view.usuario.Login;
  *
  * @author gamert
  */
-public class ListaClientes extends javax.swing.JInternalFrame {
+public class ListaClientesFrame extends javax.swing.JInternalFrame {
     private ClienteTableModel clienteTableModel;
     private Connection connection;
     private ClienteService clienteService;
-    private AgregarCliente agregarCliente;
+    private AgregarClienteFrame agregarCliente;
     /**
      * Creates new form ListaClientes
      */
-    public ListaClientes(Connection connection) {
+    public ListaClientesFrame(Connection connection) {
         initComponents();
         this.connection = connection;
         clienteService = new ClienteService(connection);
         cargarClientes(); 
-        agregarCliente = new AgregarCliente();
+        agregarCliente = new AgregarClienteFrame(clienteService);
         agregarCliente.setListaClientes(this);
-        agregarCliente.setClienteService(clienteService);
         
         // Agregar un listener para maximizar el JInternalFrame cuando se abre
         this.addInternalFrameListener(new InternalFrameAdapter() {
@@ -46,7 +45,7 @@ public class ListaClientes extends javax.swing.JInternalFrame {
                 try {
                     setMaximum(true); // Maximiza el JInternalFrame
                 } catch (java.beans.PropertyVetoException ex) {
-                    Logger.getLogger(ListaClientes.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ListaClientesFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -173,14 +172,14 @@ public class ListaClientes extends javax.swing.JInternalFrame {
 
             // Configurar la columna de "Acciones" con los botones
             TableColumn actionColumn = tblClientes.getColumnModel().getColumn(4);
-            actionColumn.setCellRenderer(new ClientButtonColumn(tblClientes, clienteService));
-            actionColumn.setCellEditor(new ClientButtonColumn(tblClientes, clienteService));
+            actionColumn.setCellRenderer(new ClienteButtonColumn(tblClientes, clienteService, this));
+            actionColumn.setCellEditor(new ClienteButtonColumn(tblClientes, clienteService, this));
         } catch (SQLException e) {
-            Logger.getLogger(ListaClientes.class.getName()).log(Level.SEVERE, "Error SQL al cargar clientes", e);
+            Logger.getLogger(ListaClientesFrame.class.getName()).log(Level.SEVERE, "Error SQL al cargar clientes", e);
         } catch (IllegalStateException e) {
-            Logger.getLogger(ListaClientes.class.getName()).log(Level.SEVERE, "Estado ilegal al cargar clientes", e);
+            Logger.getLogger(ListaClientesFrame.class.getName()).log(Level.SEVERE, "Estado ilegal al cargar clientes", e);
         } catch (Exception e) {
-            Logger.getLogger(ListaClientes.class.getName()).log(Level.SEVERE, "Error desconocido al cargar clientes", e);
+            Logger.getLogger(ListaClientesFrame.class.getName()).log(Level.SEVERE, "Error desconocido al cargar clientes", e);
         }
     }
     
@@ -191,6 +190,22 @@ public class ListaClientes extends javax.swing.JInternalFrame {
     public void addCliente(Cliente cliente){
         // Agregar el cliente al modelo de la tabla
         clienteTableModel.getClientes().add(cliente);        
+        // Notificar al modelo de la tabla que los datos han cambiado
+        clienteTableModel.fireTableDataChanged();
+    }
+    
+    public void updateCliente(Cliente cliente){
+        // Agregar el cliente al modelo de la tabla
+        List<Cliente> clientes = clienteTableModel.getClientes();
+        for (int i = 0; i < clientes.size(); i++) {
+            Cliente get = clientes.get(i);
+            if(get.getId() == cliente.getId()){
+                clientes.get(i).setRuc(cliente.getRuc());
+                clientes.get(i).setNombre(cliente.getNombre());
+                clientes.get(i).setDireccion(cliente.getDireccion());
+            }
+        }
+        
         // Notificar al modelo de la tabla que los datos han cambiado
         clienteTableModel.fireTableDataChanged();
     }

@@ -1,5 +1,6 @@
-package view.factura;
+package view.factura.ciudades;
 
+import view.factura.ciudades.*;
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableCellEditor;
@@ -9,23 +10,25 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Cliente;
-import services.ClienteService;
+import model.Ciudad;
+import services.CiudadService;
 
-public class ClientButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener {
+public class CiudadButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener {
     private final JPanel panel;
     private final JButton btnEdit;
     private final JButton btnDelete;
     private JTable table;
     private int row;
-    private ClienteService clienteService;
+    private CiudadService ciudadService;
+    private ListaCiudadesFrame listaCiudad;
 
-    public ClientButtonColumn(JTable table, ClienteService clienteService) {
+    public CiudadButtonColumn(JTable table, CiudadService ciudadService, ListaCiudadesFrame listaCiudad) {
         this.table = table;
         this.panel = new JPanel();
         this.btnEdit = new JButton("Editar");
         this.btnDelete = new JButton("Eliminar");
-        this.clienteService = clienteService;
+        this.ciudadService = ciudadService;
+        this.listaCiudad = listaCiudad;
 
         panel.setLayout(new FlowLayout());
         panel.add(btnEdit);
@@ -54,32 +57,35 @@ public class ClientButtonColumn extends AbstractCellEditor implements TableCellR
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnEdit) {
-            editarCliente(row);
+            editarCiudad(row);
         } else if (e.getSource() == btnDelete) {
-            eliminarCliente(row);
+            eliminarCiudad(row);
         }
         fireEditingStopped();
     }
 
-    private void editarCliente(int row) {
-        // Implementa la lógica para editar el cliente aquí
-        Cliente cliente = ((ClienteTableModel) table.getModel()).getClientes().get(row);
+    private void editarCiudad(int row) {
+        // Implementa la lógica para editar el ciudad aquí
+        Ciudad ciudad = ((CiudadTableModel) table.getModel()).getCiudades().get(row);
+        
+        AgregarCiudadFrame agregarCiudad = new AgregarCiudadFrame(ciudad, ciudadService, listaCiudad);
+        agregarCiudad.setVisible(true);
         // Mostrar ventana de edición, por ejemplo
-        JOptionPane.showMessageDialog(table, "Editar cliente: " + cliente.getNombre());
+        //JOptionPane.showMessageDialog(table, "Editar ciudad: " + ciudad.getNombre());
     }
 
-    private void eliminarCliente(int row) {
-        // Implementa la lógica para eliminar el cliente aquí
-        Cliente cliente = ((ClienteTableModel) table.getModel()).getClientes().get(row);
-        // Confirmar eliminación y eliminar cliente
-        int confirm = JOptionPane.showConfirmDialog(table, "¿Está seguro de eliminar el cliente: " + cliente.getNombre() + "?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+    private void eliminarCiudad(int row) {
+        // Implementa la lógica para eliminar el ciudad aquí
+        Ciudad ciudad = ((CiudadTableModel) table.getModel()).getCiudades().get(row);
+        // Confirmar eliminación y eliminar ciudad
+        int confirm = JOptionPane.showConfirmDialog(table, "¿Está seguro de eliminar el ciudad: " + ciudad.getNombre() + "?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
-                clienteService.eliminarCliente(cliente.getId());
-                ((ClienteTableModel) table.getModel()).getClientes().remove(row);
-                ((ClienteTableModel) table.getModel()).fireTableRowsDeleted(row, row);
+                ciudadService.eliminarCiudad(ciudad.getCodigo());
+                ((CiudadTableModel) table.getModel()).getCiudades().remove(row);
+                ((CiudadTableModel) table.getModel()).fireTableRowsDeleted(row, row);
             } catch (SQLException ex) {
-                Logger.getLogger(ClientButtonColumn.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(CiudadButtonColumn.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

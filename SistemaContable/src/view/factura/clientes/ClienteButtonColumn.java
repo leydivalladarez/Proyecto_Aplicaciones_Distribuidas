@@ -1,4 +1,4 @@
-package view.factura;
+package view.factura.clientes;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
@@ -12,20 +12,22 @@ import java.util.logging.Logger;
 import model.Cliente;
 import services.ClienteService;
 
-public class ClientButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener {
+public class ClienteButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener {
     private final JPanel panel;
     private final JButton btnEdit;
     private final JButton btnDelete;
     private JTable table;
     private int row;
     private ClienteService clienteService;
+    private ListaClientesFrame listaCliente;
 
-    public ClientButtonColumn(JTable table, ClienteService clienteService) {
+    public ClienteButtonColumn(JTable table, ClienteService clienteService, ListaClientesFrame listaCliente) {
         this.table = table;
         this.panel = new JPanel();
         this.btnEdit = new JButton("Editar");
         this.btnDelete = new JButton("Eliminar");
         this.clienteService = clienteService;
+        this.listaCliente = listaCliente;
 
         panel.setLayout(new FlowLayout());
         panel.add(btnEdit);
@@ -64,8 +66,11 @@ public class ClientButtonColumn extends AbstractCellEditor implements TableCellR
     private void editarCliente(int row) {
         // Implementa la lógica para editar el cliente aquí
         Cliente cliente = ((ClienteTableModel) table.getModel()).getClientes().get(row);
+        
+        AgregarClienteFrame agregarCliente = new AgregarClienteFrame(cliente, clienteService, listaCliente);
+        agregarCliente.setVisible(true);
         // Mostrar ventana de edición, por ejemplo
-        JOptionPane.showMessageDialog(table, "Editar cliente: " + cliente.getNombre());
+        //JOptionPane.showMessageDialog(table, "Editar cliente: " + cliente.getNombre());
     }
 
     private void eliminarCliente(int row) {
@@ -79,7 +84,7 @@ public class ClientButtonColumn extends AbstractCellEditor implements TableCellR
                 ((ClienteTableModel) table.getModel()).getClientes().remove(row);
                 ((ClienteTableModel) table.getModel()).fireTableRowsDeleted(row, row);
             } catch (SQLException ex) {
-                Logger.getLogger(ClientButtonColumn.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ClienteButtonColumn.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
