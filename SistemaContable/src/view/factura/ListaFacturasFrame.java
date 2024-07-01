@@ -3,40 +3,46 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view.factura.clientes;
+package view.factura;
 
-import dao.ClienteDAO;
+import view.factura.*;
+import dao.FacturaDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDesktopPane;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.TableColumn;
-import model.Cliente;
+import model.Factura;
+import services.ArticuloService;
+import services.CiudadService;
 import services.ClienteService;
+import services.FacturaService;
 import view.usuario.Login;
 
 /**
  *
  * @author gamert
  */
-public class ListaClientesFrame extends javax.swing.JInternalFrame {
-    private ClienteTableModel clienteTableModel;
+public class ListaFacturasFrame extends javax.swing.JInternalFrame {
+    private FacturaTableModel facturaTableModel;
     private Connection connection;
-    private ClienteService clienteService;
-    private AgregarClienteFrame agregarCliente;
+    private FacturaService facturaService;
+    private AgregarFacturaFrame agregarFactura;
+    private JDesktopPane escritorio;
     /**
-     * Creates new form ListaClientes
+     * Creates new form ListaFacturas
      */
-    public ListaClientesFrame(Connection connection) {
+    public ListaFacturasFrame(JDesktopPane escritorio, Connection connection) {
         initComponents();
-        this.connection = connection;
-        clienteService = new ClienteService(connection);
-        cargarClientes(); 
-        agregarCliente = new AgregarClienteFrame(clienteService);
-        agregarCliente.setListaClientes(this);
+        this.escritorio = escritorio;
+        this.connection = connection;        
+        agregarFactura = new AgregarFacturaFrame(connection, this);
+        facturaService = new FacturaService(connection);
+        cargarFacturas(); 
         
         // Agregar un listener para maximizar el JInternalFrame cuando se abre
         this.addInternalFrameListener(new InternalFrameAdapter() {
@@ -45,7 +51,7 @@ public class ListaClientesFrame extends javax.swing.JInternalFrame {
                 try {
                     setMaximum(true); // Maximiza el JInternalFrame
                 } catch (java.beans.PropertyVetoException ex) {
-                    Logger.getLogger(ListaClientesFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ListaFacturasFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -61,32 +67,32 @@ public class ListaClientesFrame extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblClientes = new javax.swing.JTable();
+        tblFacturas = new javax.swing.JTable();
         btnAgregar = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Clientes");
+        setTitle("Facturas");
 
-        tblClientes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        tblClientes.setModel(new javax.swing.table.DefaultTableModel(
+        tblFacturas.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tblFacturas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "RUC", "Nombre", "Dirección", "Acción"
+                "ID", "Número", "Fecha", "Ciudad", "Cliente", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true
+                false, true, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -97,8 +103,8 @@ public class ListaClientesFrame extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblClientes.setRowHeight(40);
-        jScrollPane1.setViewportView(tblClientes);
+        tblFacturas.setRowHeight(40);
+        jScrollPane1.setViewportView(tblFacturas);
 
         btnAgregar.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         btnAgregar.setText("Agregar");
@@ -134,85 +140,90 @@ public class ListaClientesFrame extends javax.swing.JInternalFrame {
         setBounds(0, 0, 821, 552);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cargarClientes() {
+    private void cargarFacturas() {
         try {
         // Verificar que el servicio no sea null
-            if (clienteService == null) {
-                throw new IllegalStateException("ClienteService no ha sido inicializado.");
+            if (facturaService == null) {
+                throw new IllegalStateException("FacturaService no ha sido inicializado.");
             }
 
-            // Obtener la lista de clientes desde la base de datos
-            List<Cliente> clientes = clienteService.obtenerTodosLosClientes();
+            // Obtener la lista de facturas desde la base de datos
+            List<Factura> facturas = facturaService.obtenerTodasLasFacturas();
 
-            // Verificar que la lista de clientes no sea null
-            if (clientes == null) {
-                throw new IllegalStateException("La lista de clientes es null.");
+            // Verificar que la lista de facturas no sea null
+            if (facturas == null) {
+                throw new IllegalStateException("La lista de facturas es null.");
             }
 
             // Crear el modelo de tabla y configurarlo en la tabla
-            clienteTableModel = new ClienteTableModel(clientes);
-            tblClientes.setModel(clienteTableModel);
+            facturaTableModel = new FacturaTableModel(facturas);
+            tblFacturas.setModel(facturaTableModel);
             
             // Ajustar el ancho de las columnas
             TableColumn column;
-            for (int i = 0; i < tblClientes.getColumnCount(); i++) {
-                column = tblClientes.getColumnModel().getColumn(i);
+            for (int i = 0; i < tblFacturas.getColumnCount(); i++) {
+                column = tblFacturas.getColumnModel().getColumn(i);
                 if (i == 0) { // Columna "ID"
                     column.setPreferredWidth(50);
-                } else if (i == 1) { // Columna "RUC"
+                } else if (i == 1) { // Columna "Nro"
                     column.setPreferredWidth(100);
-                } else if (i == 2) { // Columna "Nombre"
+                } else if (i == 2) { // Columna "Fecha"
                     column.setPreferredWidth(150);
-                } else if (i == 3) { // Columna "Dirección"
-                    column.setPreferredWidth(200);
-                } else if (i == 4) { // Columna "Acción"
+                } else if (i == 3) { // Columna "Ciudad"
+                    column.setPreferredWidth(150);
+                } else if (i == 4) { // Columna "Cliente"
+                    column.setPreferredWidth(150);
+                } else if (i == 5) { // Columna "Acción"
                     column.setPreferredWidth(150);
                 }
             }
 
             // Configurar la columna de "Acciones" con los botones
-            TableColumn actionColumn = tblClientes.getColumnModel().getColumn(4);
-            actionColumn.setCellRenderer(new ClienteButtonColumn(tblClientes, clienteService, this));
-            actionColumn.setCellEditor(new ClienteButtonColumn(tblClientes, clienteService, this));
+            TableColumn actionColumn = tblFacturas.getColumnModel().getColumn(5);
+            actionColumn.setCellRenderer(new FacturaButtonColumn(tblFacturas, connection, this));
+            actionColumn.setCellEditor(new FacturaButtonColumn(tblFacturas, connection, this));
         } catch (SQLException e) {
-            Logger.getLogger(ListaClientesFrame.class.getName()).log(Level.SEVERE, "Error SQL al cargar clientes", e);
+            Logger.getLogger(ListaFacturasFrame.class.getName()).log(Level.SEVERE, "Error SQL al cargar facturas", e);
         } catch (IllegalStateException e) {
-            Logger.getLogger(ListaClientesFrame.class.getName()).log(Level.SEVERE, "Estado ilegal al cargar clientes", e);
+            Logger.getLogger(ListaFacturasFrame.class.getName()).log(Level.SEVERE, "Estado ilegal al cargar facturas", e);
         } catch (Exception e) {
-            Logger.getLogger(ListaClientesFrame.class.getName()).log(Level.SEVERE, "Error desconocido al cargar clientes", e);
+            Logger.getLogger(ListaFacturasFrame.class.getName()).log(Level.SEVERE, "Error desconocido al cargar facturas", e);
         }
     }
     
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        agregarCliente.setVisible(true);
+        escritorio.add(agregarFactura);
+        agregarFactura.show();
+        this.hide();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    public void addCliente(Cliente cliente){
-        // Agregar el cliente al modelo de la tabla
-        clienteTableModel.getClientes().add(cliente);        
+    public void addFactura(Factura factura){
+        // Agregar el factura al modelo de la tabla
+        facturaTableModel.getFacturas().add(factura);        
         // Notificar al modelo de la tabla que los datos han cambiado
-        clienteTableModel.fireTableDataChanged();
+        facturaTableModel.fireTableDataChanged();
     }
     
-    public void updateCliente(Cliente cliente){
-        // Agregar el cliente al modelo de la tabla
-        List<Cliente> clientes = clienteTableModel.getClientes();
-        for (int i = 0; i < clientes.size(); i++) {
-            Cliente get = clientes.get(i);
-            if(get.getId() == cliente.getId()){
-                clientes.get(i).setRuc(cliente.getRuc());
-                clientes.get(i).setNombre(cliente.getNombre());
-                clientes.get(i).setDireccion(cliente.getDireccion());
+    public void updateFactura(Factura factura){
+        // Agregar el factura al modelo de la tabla
+        List<Factura> facturas = facturaTableModel.getFacturas();
+        for (int i = 0; i < facturas.size(); i++) {
+            Factura get = facturas.get(i);
+            if(get.getId() == factura.getId()){
+                facturas.get(i).setNumero(factura.getNumero());
+                facturas.get(i).setFecha(factura.getFecha());
+                facturas.get(i).setCiudad(factura.getCiudad());
+                facturas.get(i).setCliente(factura.getCliente());
             }
         }
         
         // Notificar al modelo de la tabla que los datos han cambiado
-        clienteTableModel.fireTableDataChanged();
+        facturaTableModel.fireTableDataChanged();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblClientes;
+    private javax.swing.JTable tblFacturas;
     // End of variables declaration//GEN-END:variables
 }

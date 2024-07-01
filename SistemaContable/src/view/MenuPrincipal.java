@@ -7,6 +7,7 @@ package view;
 
 import java.sql.Connection;
 import model.Usuario;
+import view.factura.ListaFacturasFrame;
 import view.factura.ciudades.ListaCiudadesFrame;
 import view.factura.clientes.ListaClientesFrame;
 import view.usuario.Login;
@@ -46,7 +47,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         menuFacturacion = new javax.swing.JMenu();
         opListaClientes = new javax.swing.JMenuItem();
         opListaCiudades = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        opListaFacturas = new javax.swing.JMenuItem();
         menuPerfil = new javax.swing.JMenu();
         menuUsuario = new javax.swing.JMenuItem();
         menuLogout = new javax.swing.JMenuItem();
@@ -93,8 +94,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         menuFacturacion.add(opListaCiudades);
 
-        jMenuItem3.setText("Facturas");
-        menuFacturacion.add(jMenuItem3);
+        opListaFacturas.setText("Facturas");
+        opListaFacturas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opListaFacturasActionPerformed(evt);
+            }
+        });
+        menuFacturacion.add(opListaFacturas);
 
         jMenuBar1.add(menuFacturacion);
 
@@ -171,6 +177,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         listaCiudades.show();
     }//GEN-LAST:event_opListaCiudadesActionPerformed
 
+    private void opListaFacturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opListaFacturasActionPerformed
+        ListaFacturasFrame listaFacturas = new ListaFacturasFrame(escritorio, connection);
+        escritorio.add(listaFacturas);
+        listaFacturas.show();
+    }//GEN-LAST:event_opListaFacturasActionPerformed
+
     public void setLogin(Login login){
         this.login = login;
     }
@@ -225,7 +237,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane escritorio;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenu menuActivos;
     private javax.swing.JMenu menuContabilidad;
     private javax.swing.JMenu menuFacturacion;
@@ -235,5 +246,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuUsuario;
     private javax.swing.JMenuItem opListaCiudades;
     private javax.swing.JMenuItem opListaClientes;
+    private javax.swing.JMenuItem opListaFacturas;
     // End of variables declaration//GEN-END:variables
 }

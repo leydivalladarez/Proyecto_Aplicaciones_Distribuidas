@@ -1,33 +1,37 @@
-package view.factura.clientes;
+package view.factura;
 
+import view.factura.*;
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Cliente;
-import services.ClienteService;
+import model.Factura;
+import services.FacturaService;
 
-public class ClienteButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener {
+public class FacturaButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener {
     private final JPanel panel;
     private final JButton btnEdit;
     private final JButton btnDelete;
     private JTable table;
     private int row;
-    private ClienteService clienteService;
-    private ListaClientesFrame listaCliente;
+    private FacturaService facturaService;
+    private ListaFacturasFrame listaFactura;
+    private Connection connection;
 
-    public ClienteButtonColumn(JTable table, ClienteService clienteService, ListaClientesFrame listaCliente) {
+    public FacturaButtonColumn(JTable table, Connection connection, ListaFacturasFrame listaFactura) {
         this.table = table;
         this.panel = new JPanel();
         this.btnEdit = new JButton("Editar");
         this.btnDelete = new JButton("Eliminar");
-        this.clienteService = clienteService;
-        this.listaCliente = listaCliente;
+        this.facturaService = new FacturaService(connection);
+        this.listaFactura = listaFactura;
+        this.connection = connection;
 
         panel.setLayout(new FlowLayout());
         panel.add(btnEdit);
@@ -56,35 +60,35 @@ public class ClienteButtonColumn extends AbstractCellEditor implements TableCell
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnEdit) {
-            editarCliente(row);
+            editarFactura(row);
         } else if (e.getSource() == btnDelete) {
-            eliminarCliente(row);
+            eliminarFactura(row);
         }
         fireEditingStopped();
     }
 
-    private void editarCliente(int row) {
-        // Implementa la lógica para editar el cliente aquí
-        Cliente cliente = ((ClienteTableModel) table.getModel()).getClientes().get(row);
+    private void editarFactura(int row) {
+        // Implementa la lógica para editar el factura aquí
+        Factura factura = ((FacturaTableModel) table.getModel()).getFacturas().get(row);
         
-        AgregarClienteFrame agregarCliente = new AgregarClienteFrame(cliente, clienteService, listaCliente);
-        agregarCliente.setVisible(true);
+        AgregarFacturaFrame agregarFactura = new AgregarFacturaFrame(factura, connection, listaFactura);
+        agregarFactura.setVisible(true);
         // Mostrar ventana de edición, por ejemplo
-        //JOptionPane.showMessageDialog(table, "Editar cliente: " + cliente.getNombre());
+        //JOptionPane.showMessageDialog(table, "Editar factura: " + factura.getNombre());
     }
 
-    private void eliminarCliente(int row) {
-        // Implementa la lógica para eliminar el cliente aquí
-        Cliente cliente = ((ClienteTableModel) table.getModel()).getClientes().get(row);
-        // Confirmar eliminación y eliminar cliente
-        int confirm = JOptionPane.showConfirmDialog(table, "¿Está seguro de eliminar el cliente: " + cliente.getNombre() + "?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+    private void eliminarFactura(int row) {
+        // Implementa la lógica para eliminar el factura aquí
+        Factura factura = ((FacturaTableModel) table.getModel()).getFacturas().get(row);
+        // Confirmar eliminación y eliminar factura
+        int confirm = JOptionPane.showConfirmDialog(table, "¿Está seguro de eliminar el factura: " + factura.getNumero()+ "?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             try {
-                clienteService.eliminarCliente(cliente.getId());
-                ((ClienteTableModel) table.getModel()).getClientes().remove(row);
-                ((ClienteTableModel) table.getModel()).fireTableRowsDeleted(row, row);
+                facturaService.eliminarFactura(factura.getId());
+                ((FacturaTableModel) table.getModel()).getFacturas().remove(row);
+                ((FacturaTableModel) table.getModel()).fireTableRowsDeleted(row, row);
             } catch (SQLException ex) {
-                Logger.getLogger(ClienteButtonColumn.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FacturaButtonColumn.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
