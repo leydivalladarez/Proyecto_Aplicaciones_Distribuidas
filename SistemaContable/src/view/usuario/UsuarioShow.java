@@ -6,9 +6,10 @@
 package view.usuario;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import model.Modulo;
 import model.Usuario;
-import services.UsuarioService;
+import util.Helper;
 
 /**
  *
@@ -16,12 +17,17 @@ import services.UsuarioService;
  */
 public class UsuarioShow extends javax.swing.JFrame {
     private Usuario usuario;
+    DefaultListModel modelo = new DefaultListModel();
+    Helper helper = new Helper();
 
     /**
      * Creates new form UsuarioShow
      */
     public UsuarioShow() {
         initComponents();
+        listModulos.setModel(modelo);
+        buttonRegresar.setBackground(helper.getBgColorButton());
+        buttonRegresar.setForeground(helper.getFgColorButton());
     }
 
     /**
@@ -40,9 +46,11 @@ public class UsuarioShow extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         listModulos = new javax.swing.JList<>();
         jLabel3 = new javax.swing.JLabel();
+        buttonRegresar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Perfil de usuario");
         setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel1.setText("Usuario");
@@ -62,6 +70,14 @@ public class UsuarioShow extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel3.setText("Permisos a Módulos");
 
+        buttonRegresar.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        buttonRegresar.setText("Regresar");
+        buttonRegresar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                buttonRegresarMousePressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -69,6 +85,7 @@ public class UsuarioShow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(buttonRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -96,11 +113,18 @@ public class UsuarioShow extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(buttonRegresar)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void buttonRegresarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonRegresarMousePressed
+        this.setVisible(false);
+    }//GEN-LAST:event_buttonRegresarMousePressed
 
     
     
@@ -114,7 +138,20 @@ public class UsuarioShow extends javax.swing.JFrame {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
         this.labelUsuario.setText(usuario.getUsuario());
-        this.labelRol.setText(usuario.getRol().getNombre());
+        this.labelRol.setText(helper.letraCapital(usuario.getRol().getNombre()));
+        modelo.removeAllElements();
+        for (Modulo modulo : usuario.getRol().getModulos()) {
+            String nombreModulo = helper.letraCapital(modulo.getNombre());
+            modelo.addElement(nombreModulo);
+        }
+    }
+    
+    //Metodo para el cierre por boton X
+    public void cerrar(){
+        try {
+            this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        } catch (Exception e) {
+        }
     }
 
     public static void main(String args[]) {
@@ -150,6 +187,7 @@ public class UsuarioShow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonRegresar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

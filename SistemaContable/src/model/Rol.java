@@ -47,5 +47,10 @@ public class Rol {
 
     public void setModulos(List<Modulo> modulos) {
         this.modulos = modulos;
-    }        
+    }     
+    
+    @Override
+    public String toString(){
+        return this.nombre;
+    }
 }

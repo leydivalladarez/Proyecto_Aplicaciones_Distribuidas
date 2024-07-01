@@ -22,6 +22,12 @@ public class Usuario {
         this.usuario = usuario;
         this.contrasenia = contrasenia;
     }
+    
+    public Usuario(String usuario, String contrasenia,Rol rol) {
+        this.usuario = usuario;
+        this.contrasenia = contrasenia;
+        this.rol = rol;
+    }
 
     public Usuario(int id, String usuario, String contrasenia, Rol rol) {
         this.id = id;

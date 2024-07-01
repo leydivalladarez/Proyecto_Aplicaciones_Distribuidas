@@ -44,7 +44,7 @@ public class UsuarioService {
 
     public Usuario loguearUsuario(String usuario, String contrasenia) throws SQLException {
         Usuario usuarioM = usuarioDAO.loguearUsuario(usuario, contrasenia);
-        if(usuarioM.getRol().getId() == 1){
+        if(usuarioM != null && usuarioM.getRol().getId() == 1){
             usuarioM.getRol().setModulos(moduloDAO.obtenerTodosLosModulos());            
         }        
         return usuarioM;
@@ -54,5 +54,7 @@ public class UsuarioService {
         return moduloDAO.obtenerTodosLosModulos();
     }
 
-    // Otros métodos de negocio relacionados con Usuario
+    public boolean existeUsuario(String usuario) throws SQLException{
+        return usuarioDAO.existeUsuario(usuario);
+    }
 }

@@ -5,7 +5,9 @@
  */
 package view;
 
+import java.sql.Connection;
 import model.Usuario;
+import view.factura.ListaClientes;
 import view.usuario.Login;
 import view.usuario.UsuarioShow;
 
@@ -17,10 +19,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private Login login;
     private Usuario usuario;
     UsuarioShow usuarioShow = new UsuarioShow();
+    private Connection connection;
     /**
      * Creates new form MenuPrincipal
      */
-    public MenuPrincipal() {
+    public MenuPrincipal(Connection connection) {
+        this.connection = connection;
         initComponents();
     }
 
@@ -39,6 +43,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         menuActivos = new javax.swing.JMenu();
         menuContabilidad = new javax.swing.JMenu();
         menuFacturacion = new javax.swing.JMenu();
+        opListaClientes = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         menuPerfil = new javax.swing.JMenu();
         menuUsuario = new javax.swing.JMenuItem();
         menuLogout = new javax.swing.JMenuItem();
@@ -49,11 +56,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         escritorio.setLayout(escritorioLayout);
         escritorioLayout.setHorizontalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1038, Short.MAX_VALUE)
+            .addGap(0, 1048, Short.MAX_VALUE)
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 595, Short.MAX_VALUE)
+            .addGap(0, 604, Short.MAX_VALUE)
         );
 
         jMenuBar1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -68,6 +75,21 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenuBar1.add(menuContabilidad);
 
         menuFacturacion.setText("Facturación");
+
+        opListaClientes.setText("Clientes");
+        opListaClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opListaClientesActionPerformed(evt);
+            }
+        });
+        menuFacturacion.add(opListaClientes);
+
+        jMenuItem2.setText("Ciudades");
+        menuFacturacion.add(jMenuItem2);
+
+        jMenuItem3.setText("Facturas");
+        menuFacturacion.add(jMenuItem3);
+
         jMenuBar1.add(menuFacturacion);
 
         menuPerfil.setText("Perfil");
@@ -99,15 +121,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(escritorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(escritorio)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(escritorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(escritorio)
+                .addContainerGap())
         );
 
         pack();
@@ -129,6 +153,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         usuarioShow.setVisible(true);
     }//GEN-LAST:event_menuUsuarioMousePressed
 
+    private void opListaClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opListaClientesActionPerformed
+        ListaClientes listaClientes = new ListaClientes(this.connection);        
+        escritorio.add(listaClientes);
+        listaClientes.show();
+    }//GEN-LAST:event_opListaClientesActionPerformed
+
     public void setLogin(Login login){
         this.login = login;
     }
@@ -138,8 +168,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
 
     public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-        menuUsuario.setText(usuario.getUsuario());
+        try {
+            this.usuario = usuario;
+            menuUsuario.setText(usuario.getUsuario());
+        } catch (Exception e) {
+        }        
     }    
     
     /**
@@ -172,7 +205,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MenuPrincipal().setVisible(true);
+                //new MenuPrincipal().setVisible(true);
             }
         });
     }
@@ -180,6 +213,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane escritorio;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenu menuActivos;
     private javax.swing.JMenu menuContabilidad;
     private javax.swing.JMenu menuFacturacion;
@@ -187,5 +222,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menuNomina;
     private javax.swing.JMenu menuPerfil;
     private javax.swing.JMenuItem menuUsuario;
+    private javax.swing.JMenuItem opListaClientes;
     // End of variables declaration//GEN-END:variables
 }

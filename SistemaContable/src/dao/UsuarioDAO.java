@@ -41,6 +41,15 @@ public class UsuarioDAO {
         }
         return null;
     }
+    
+    public boolean existeUsuario(String usuario) throws SQLException{
+        String sql = "SELECT * FROM usuarios WHERE usuario = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, usuario);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        }
+    }
 
     public List<Usuario> obtenerTodosLosUsuarios() throws SQLException {
         List<Usuario> usuarios = new ArrayList<>();

@@ -24,7 +24,8 @@ import view.activo.ActivoForm;
  */
 public class Login extends javax.swing.JFrame {
     UsuarioService usuarioService;
-    MenuPrincipal menu = new MenuPrincipal();
+    MenuPrincipal menu;
+    UsuarioCreate usuarioCreate;
     Usuario usuario;
 
     /**
@@ -32,6 +33,8 @@ public class Login extends javax.swing.JFrame {
      */
     public Login(Connection connection) {
         usuarioService = new UsuarioService(connection);
+        usuarioCreate = new UsuarioCreate(connection);
+        menu = new MenuPrincipal(connection);
         initComponents();
     }
 
@@ -51,12 +54,13 @@ public class Login extends javax.swing.JFrame {
         txtContrasenia = new javax.swing.JPasswordField();
         loginButton = new javax.swing.JButton();
         exitButton = new javax.swing.JButton();
+        btnRegistrarse = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Iniciar Sesión");
         setResizable(false);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Inicio de Sesión");
 
@@ -80,7 +84,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        loginButton.setBackground(new java.awt.Color(100, 149, 237));
+        loginButton.setBackground(new java.awt.Color(0, 102, 204));
         loginButton.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         loginButton.setForeground(new java.awt.Color(255, 255, 255));
         loginButton.setText("Iniciar Sesión");
@@ -100,10 +104,24 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        btnRegistrarse.setBackground(new java.awt.Color(0, 153, 0));
+        btnRegistrarse.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        btnRegistrarse.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegistrarse.setText("Registrarse");
+        btnRegistrarse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnRegistrarseMousePressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(35, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -118,12 +136,9 @@ public class Login extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(loginButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(exitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(exitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnRegistrarse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(35, 35, 35))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(94, 94, 94)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,11 +153,13 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loginButton)
                     .addComponent(exitButton))
-                .addGap(20, 20, 20))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnRegistrarse)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -168,6 +185,13 @@ public class Login extends javax.swing.JFrame {
             txtContrasenia.requestFocus();
         }
     }//GEN-LAST:event_txtUsuarioKeyPressed
+
+    private void btnRegistrarseMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarseMousePressed
+        usuarioCreate.setLogin(this);
+        usuarioCreate.setUsuarioService(usuarioService);
+        usuarioCreate.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnRegistrarseMousePressed
 
     /**
      * @param args the command line arguments
@@ -222,7 +246,7 @@ public class Login extends javax.swing.JFrame {
                 menu.setUsuario(loggedIn);
                 this.setVisible(false);
             }else{
-                JOptionPane.showMessageDialog(null, "Error en el usuario y/o contraseña");
+                JOptionPane.showMessageDialog(null, "Error en el usuario y/o contraseña", "Error", JOptionPane.ERROR_MESSAGE);
             }
             txtUsuario.setText("");
             txtContrasenia.setText("");
@@ -233,6 +257,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegistrarse;
     private javax.swing.JButton exitButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

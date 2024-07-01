@@ -1,58 +1,35 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package services;
 
-import dao.ModuloDAO;
-import model.Usuario;
-import dao.UsuarioDAO;
+import model.Rol;
+import dao.RolDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import model.Modulo;
 
-public class UsuarioService {
-    private UsuarioDAO usuarioDAO;
-    private ModuloDAO moduloDAO;
+public class RolService {
+    private RolDAO rolDAO;
 
-    public UsuarioService(Connection connection) {
-        this.usuarioDAO = new UsuarioDAO(connection);
-        this.moduloDAO = new ModuloDAO(connection);
+    public RolService(Connection connection) {
+        this.rolDAO = new RolDAO(connection);
     }
 
-    public void agregarUsuario(Usuario usuario) throws SQLException {
-        usuarioDAO.agregarUsuario(usuario);
+    public void agregarRol(Rol rol) throws SQLException {
+        rolDAO.agregarRol(rol);
     }
 
-    public Usuario obtenerUsuarioPorId(int id) throws SQLException {
-        return usuarioDAO.obtenerUsuario(id);
+    public Rol obtenerRol(int id) throws SQLException {
+        return rolDAO.obtenerRol(id);
     }
 
-    public List<Usuario> obtenerTodosLosUsuarios() throws SQLException {
-        return usuarioDAO.obtenerTodosLosUsuarios();
+    public List<Rol> obtenerTodosLosRoles() throws SQLException {
+        return rolDAO.obtenerTodosLosRoles();
     }
 
-    public void actualizarUsuario(Usuario usuario) throws SQLException {
-        usuarioDAO.actualizarUsuario(usuario);
+    public void actualizarRol(Rol rol) throws SQLException {
+        rolDAO.actualizarRol(rol);
     }
 
-    public void eliminarUsuario(int id) throws SQLException {
-        usuarioDAO.eliminarUsuario(id);
+    public void eliminarRol(int id) throws SQLException {
+        rolDAO.eliminarRol(id);
     }
-
-    public Usuario loguearUsuario(String usuario, String contrasenia) throws SQLException {
-        Usuario usuarioM = usuarioDAO.loguearUsuario(usuario, contrasenia);
-        if(usuarioM.getRol().getId() == 1){
-            usuarioM.getRol().setModulos(moduloDAO.obtenerTodosLosModulos());            
-        }        
-        return usuarioM;
-    }
-    
-    public List<Modulo> obtenerTodosLosModulos() throws SQLException{
-        return moduloDAO.obtenerTodosLosModulos();
-    }
-
-    // Otros métodos de negocio relacionados con Usuario
 }
